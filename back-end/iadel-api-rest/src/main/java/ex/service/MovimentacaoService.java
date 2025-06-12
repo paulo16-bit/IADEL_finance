@@ -24,6 +24,10 @@ public class MovimentacaoService {
     public List<Movimentacao> getByTipo(TipoMovimentacao tipo) {
         return movimentacaoRepository.findByTipo(tipo);
     }
+    public List<Movimentacao> listarPorUsuario(int usuarioId) {
+        return movimentacaoRepository.findByUsuarioId(usuarioId);
+    }
+
 
     // Adicionar uma nova movimentação
     @Transactional
