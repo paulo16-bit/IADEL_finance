@@ -28,6 +28,7 @@ public interface MovimentacaoRepository extends JpaRepository<Movimentacao, Inte
     	       "AND FUNCTION('TO_CHAR', m.data, 'YYYY') = :anoStr " +
     	       "ORDER BY m.data ASC")
     List<Movimentacao> findByMesAndAno(@Param("tipo") TipoMovimentacao tipo, @Param("mesStr") String mesStr, @Param("anoStr") String anoStr);
-      
+    
+    List<Movimentacao> findByUsuarioId(int id);
     List<Movimentacao> findAll();
 }

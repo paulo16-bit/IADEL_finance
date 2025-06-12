@@ -71,6 +71,12 @@ public class MovimentacaoController {
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
+    @GetMapping("/dizimoByUsuario")
+    public ResponseEntity<List<Movimentacao>> listarPorMesAno(
+    	@RequestParam int id_usuario) {
+        List<Movimentacao> movimentacoes = movimentacaoService.listarPorUsuario(id_usuario);
+        return ResponseEntity.ok(movimentacoes);
+    }
 
     // Rota para adicionar uma nova movimentação (POST)
     @PostMapping

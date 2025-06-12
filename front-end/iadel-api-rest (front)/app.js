@@ -50,7 +50,7 @@ app.get('/logout', (req, res) => {
     res.redirect('/login');
 });
 
-app.get('/', async (req, res) => {
+app.get('/', isAuthenticated, async (req, res) => {
     try {
         const now = new Date();
         const mes = req.query.mes || (now.getMonth()+1).toString().padStart(2, '0');
@@ -123,6 +123,7 @@ app.get('/despesas', async (req, res) => {
     try {
         const now = new Date();
         const mes = req.query.mes || (now.getMonth()+1).toString().padStart(2, '0');
+        const ano = req.query.ano || now.getFullYear().toString();
 
         const response = await axios.get(`${API_URL}/movimentacoes`, {
             params: { tipo: 'despesa', mes, ano }
@@ -228,6 +229,25 @@ app.delete('/excluir/:id', async (req, res) => {
         res.status(500).send('Erro ao excluir movimentação');
     }
 });
+
+// usuario comum
+app.get('/lista_dizimo', isAuthenticated, async (req, res) => {
+    const usuario = req.session.user;
+    const id_usuario = usuario.id_usuarios;
+    const nome_usuario = usuario.nome;
+
+    try {
+        const response = await axios.get(`${API_URL}/movimentacoes/dizimoByUsuario`, {
+            params: { id_usuario }
+        });
+
+        res.render('usuarioComum', { dizimos: response.data, nome: nome_usuario });
+    } catch (error) {
+        console.error('Erro ao buscar dízimos do usuário:', error.message);
+        res.status(500).send('Erro ao buscar dízimos do usuário');
+    }
+});
+
 
 app.listen(3000, '0.0.0.0', () => {
     console.log('Servidor rodando na porta 3000');
